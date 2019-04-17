@@ -4,7 +4,7 @@ On your local linux machine:
 
 * Installed [Ansible 2.7](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) and higher
 
-* Installed [Vagrant](https://www.vagrantup.com/downloads.html)
+* Installed [Vagrant](https://www.vagrantup.com/downloads.html) with VirtualBox provider
 
 ## Usage:
 
