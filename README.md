@@ -15,6 +15,7 @@ On your local linux machine:
 ## After VM installation and provisioning
 
 Application is available on your localhost on port 8080:
+
 ```http://localhost:8080```
 
 To GET list of users, type:
