@@ -1,0 +1,7 @@
+---
+- name: Set up and start web application
+  hosts: app
+  become: yes
+  gather_facts: no
+  roles:
+    - application

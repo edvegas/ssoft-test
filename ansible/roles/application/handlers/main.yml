@@ -1,0 +1,16 @@
+- name: start web application service
+  systemd:
+    name: webapp
+    state: started
+    enabled: yes
+
+- name: restart Nginx
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: migrate DB
+  shell: FLASK_APP=app.py flask db upgrade
+  args:
+    chdir: "{{ homedir }}/test-app/app"

@@ -1,0 +1,15 @@
+---
+- name: Install python for ansible
+  hosts: all
+  gather_facts: no
+  become: yes
+  pre_tasks:
+  - name: Install python 
+    raw: test -e /usr/bin/python || (apt-get -y update && apt-get install -y python-minimal)
+    register: output
+    changed_when:
+      - output.stdout != ""
+      - output.stdout != "\r\n"
+
+- import_playbook: db.yml 
+- import_playbook: app.yml

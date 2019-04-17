@@ -1,0 +1,7 @@
+- name: Add user for application service and serving web app
+  user:
+    name: devops
+
+- include: appinstall.yml
+- include: nginxsetup.yml
+

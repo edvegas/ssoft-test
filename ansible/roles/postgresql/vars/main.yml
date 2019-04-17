@@ -1,0 +1,3 @@
+dbname: app
+dbuser: worker
+dbpass: worker

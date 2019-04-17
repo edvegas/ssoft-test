@@ -1,0 +1,48 @@
+- name: Clone Application Repo
+  become_user: devops
+  git:
+    repo: https://bitbucket.org/m_baranov/test-app.git
+    dest: "{{ homedir }}/test-app"
+    force: yes #don't forget to delete this row once everything is tested
+
+- name: Install Python3
+  apt:
+    name: ['python3', 'python3-pip', 'python-pip', 'python-setuptools']
+    update_cache: yes
+
+- name: Install VirtualEnv
+  pip:
+    name: virtualenv
+
+- name: Extend PATH to be able to find virtualenv
+  shell: export PATH=$PATH:/home/devops/.local/bin
+
+- name: Install requirements in virtualenv of user
+  become_user: devops
+  pip:
+    requirements: "{{ homedir }}/test-app/app/requirements.txt"
+    virtualenv: "{{ homedir }}/venv"
+
+- name: Install global requirements
+  pip:
+    requirements: "{{ homedir }}/test-app/app/requirements.txt"
+
+- name: Change config.py of application to connect to db host
+  become_user: devops
+  template:
+    src: config.py.j2
+    dest: "{{ homedir }}/test-app/app/config.py"
+
+- name: Create uWSGI configuration
+  become_user: devops
+  template:
+    src: wsgi.ini
+    dest: "{{ homedir }}/wsgi.ini"
+
+- name: Create systemd unit service for web application
+  template:
+    src: webapp.service.j2
+    dest: /etc/systemd/system/webapp.service
+  notify: 
+    - start web application service
+    - migrate DB

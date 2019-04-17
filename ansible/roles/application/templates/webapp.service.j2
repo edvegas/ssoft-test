@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve flask application
+After=network.target
+
+[Service]
+User=devops
+Group=devops
+WorkingDirectory={{ homedir }}/test-app/app
+Environment="PATH={{ homedir }}/venv/bin"
+ExecStart={{ homedir }}/venv/bin/uwsgi --ini {{ homedir }}/wsgi.ini
+
+[Install]
+WantedBy=multi-user.target

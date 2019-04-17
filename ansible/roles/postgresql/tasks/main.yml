@@ -1,0 +1,46 @@
+- name: Add PostgreSQL 9.6 repository to system
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
+
+- name: Add a signing key of postgresql repo
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: Install PostgreSQL 9.6
+  apt:
+    name: ['postgresql-9.6', 'postgresql-contrib-9.6']
+    update_cache: yes
+
+- name: Install Python3
+  apt:
+    name: ['python3-setuptools', 'python3', 'python3-pip', 'python-pip']
+
+- name: Install psycopg2
+  pip:
+    name: psycopg2==2.7.4
+
+- name: Update PostgreSQL config to receive connections from other VM
+  template:
+    src: postgresql.conf.j2
+    dest: /etc/postgresql/9.6/main/postgresql.conf
+
+- name: Update PostgreSQL config to allow connections from other VM
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/9.6/main/pg_hba.conf
+
+- name: Create app database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ dbname }}"
+
+- name: Add user and grant access to DB
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    db: "{{ dbname }}"
+    name: "{{ dbuser }}"
+    password: "{{ dbpass }}"
+    priv: ALL
+  notify: restart PostgreSQL
