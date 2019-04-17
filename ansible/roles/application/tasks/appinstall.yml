@@ -3,7 +3,7 @@
   git:
     repo: https://bitbucket.org/m_baranov/test-app.git
     dest: "{{ homedir }}/test-app"
-    force: yes #don't forget to delete this row once everything is tested
+    force: yes
 
 - name: Install Python3
   apt:
